@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <title>Meme Generator</title>
+</head>
+
+<body onload="onInit()">
+
+  <!-- Image Gallery -->
+  <div class="gallery-container">
+
+    <header class="gallery-header">
+      <nav>
+        <h1 class="logo">Keepos</h1>
+      </nav>
+      <!-- <input class="filter-imgs" type="text" autofocus> -->
+
+      <form method="get">
+        <input onkeyup="onMemeFilter(this ,event)" class="filter-imgs" autofocus list="meme-types" name="meme-types" id="meme-types">
+        <datalist id="meme-types">
+          <option value="animal">
+          <option value="kids">
+          <option value="funny">
+          <option value="famous">
+        </datalist>
+      </form>
+
+    </header>
+
+    <main>
+      <div class="imgs-container flex"></div>
+    </main>
+    <!-- Meme Editor -->
+    <div class="editor-container">
+
+      <div class="canvas-container">
+        <canvas id="meme-canvas" width="500px" height="500px"></canvas>
+      </div>
+
+      <div class="editor">
+        <div class="meme-txt"> <input onkeyup="onGetUserTxt(this.value)" type="text"></div>
+        <div class="trash"><button><img onclick="onDeleteLine()" class="icon-btn" src="./imgs/ICONS/trash.png"></button>
+        </div>
+        <div class="add-line"> <button><img onclick="onAddLine()" class="icon-btn" src="./imgs/ICONS/add.png"></button>
+        </div>
+        <div class="switch-line"> <button><img class="icon-btn" onclick="onSwitchLine()"
+              src="./imgs/ICONS/up-and-down-opposite-double-arrows-side-by-side.png"></button></div>
+
+        <div class="font-up"> <button><img class="icon-btn" onclick="onFontSizing(1)"
+              src="./imgs/ICONS/increase-font-icon.png"></button></div>
+        <div class="font-down"> <button><img class="icon-btn" onclick="onFontSizing(-1)"
+              src="./imgs/ICONS/decrease-font-icon.png"></button></div>
+        <div class="align-left"> <button><img onclick="onFontAligment('Right')" class="icon-btn"
+              src="./imgs/ICONS/align-to-left.png"></button></div>
+        <div class="align-center"> <button><img onclick="onFontAligment('center')" class="icon-btn"
+              src="./imgs/ICONS/center-text-alignment.png"></button></div>
+        <div class="align-right"> <button><img onclick="onFontAligment('right')" class="icon-btn"
+              src="./imgs/ICONS/align-to-right.png"></button></div>
+        <select onchange="onChangeFont(this.value)" id="fonts">
+          <option value="Impact">Impact</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Verdana">Verdana</option>
+        </select>
+        <div class="stroke-btn"> <button><input class="stroke-color" onchange="onChangeStrokeColor(this.value)"
+              type="color"><img class="icon-btn" src="./imgs/ICONS/text-stroke.png"></button></div>
+        <div class="txt-color"> <button><input class="inner-color" onchange="onChangeTextColor(this.value)"
+              type="color"><img class="icon-btn" src="./imgs/ICONS/paint-board-and-brush.png"></button></div>
+
+        <div class="download"><a onclick="onDownloadCanvas(this)" href="#" download="">Download</a></div>
+
+      </div>
+
+    </div>
+
+    <footer class="flex">
+      <div class="footer-content">
+        <h1 class="logo">Keepos</h1>
+        <p>All rights reserved... or all left</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/storage-service.js"></script>
+  <script src="js/service.js"></script>
+  <script src="js/controller.js"></script>
+</body>
+
+</html>
