@@ -101,17 +101,17 @@ p {
   height: 100%;
   background-color: lightgray;
   justify-content: space-between;
+  padding-inline-end: 1.5rem;
 }
 
 .canvas-container {
-  max-width: 50vw;
+  max-width: 50%;
   max-height: 80%;
   margin-inline-start: 1.5rem;
 } 
 
-
 .editor {
-  max-width: 50vw;
+  /* max-width: 50vw; */
   display: grid;
   grid-template-areas: 
   " meme-txt meme-txt meme-txt meme-txt meme-txt"
@@ -218,16 +218,32 @@ input[type=color] {
 
 
 @media (max-width: 990px) {
+  .canvas-container {
+    min-width: 30%;
+    min-height: 60%;
+    margin-inline-end: 10px;
+  } 
+  .icon-btn {
+    width: 40px;  
+    height: 40px;    
+  }
+}
+
+
+@media (max-width: 660px) {
   .editor-container {
     flex-direction: column;
+    padding: 0 10px;
   }
   .editor {
     margin-top: 1rem;
-    margin-inline-start: 1.5rem;
+    padding-inline-start: 1.5rem;
   }
   .canvas-container {
-    max-width: 80vw;
-    max-height: 60vh;
-    margin-inline-start: 1.5rem;
+    min-width: 90%;
+    min-height: 20%;
   } 
+  .editor-container button {
+    border-radius: 10px;
+  }
 }

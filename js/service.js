@@ -32,12 +32,16 @@ let createImgs = () => {
     img.id = i + 1;
     img.url = `imgs/meme-imgs/${i + 1}.jpg`;
 
-    if (i <= 3) img.keywords = ['animal', 'funny'];
-    else if (i <= 6) img.keywords = ['kids', 'funny'];
+    if (i < 3) img.keywords = ['animal', 'funny'];
+    else if (i < 6) img.keywords = ['kids', 'funny'];
     else img.keywords = ['funny', 'famous'];
 
     gImgs.push(img);
   }
+  return gImgs;
+}
+
+let getGImgs = () => {
   return gImgs;
 }
 

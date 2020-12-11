@@ -2,44 +2,26 @@
 let gCanvas;
 let gCtx;
 let gRowsCount = 1;
-let gImgCounter = 0;
 
 
 let onInit = () => {
+  createImgs();
   renderImgs();
   getCanvas();
   makePalteWhite();
 }
 
 
-// let renderImgs = (filter = 'funny') => {
-//   if (gImgCounter === 0) {
-//     var imgs = createImgs();
-//   }
-//   gImgCounter++
-//   let afterFilter = [];
+let renderImgs = (filter = 'funny') => {
+  let imgs = getGImgs();
 
-//   imgs.forEach(img => {
-//     if (img.keywords[0].includes(filter) || img.keywords[1].includes(filter)) {
-//       afterFilter.push(img);
-//     }
-//   });
-
-//   let strHTMLs = afterFilter.map(img => {
-//     return `<div class="img-wrapper"><img data-id="${img.id}" src="${img.url}" alt=""
-//     onclick="onImgClick('${img.url}', ${img.id})"></div>`;
-//   });
-//   console.log(afterFilter);
-
-//   document.querySelector('.imgs-container').innerHTML = strHTMLs.join('');
-// }
-
-let renderImgs = () => {
-  let imgs = createImgs();
   let strHTMLs = imgs.map(img => {
-    return `<div class="img-wrapper"><img data-id="${img.id}" src="${img.url}" alt=""
-    onclick="onImgClick('${img.url}', ${img.id})"></div>`;
+    if (img.keywords[0].includes(filter) || img.keywords[1].includes(filter)) {
+      return `<div class="img-wrapper"><img data-id="${img.id}" src="${img.url}" alt=""
+      onclick="onImgClick('${img.url}', ${img.id})"></div>`;
+    }
   });
+
   document.querySelector('.imgs-container').innerHTML = strHTMLs.join('');
 }
 
@@ -202,7 +184,7 @@ let onDeleteLine = () => {
 
   let lineIdx = deleteLine();
   let memeStat = getGMeme();
-  let lineTxt = lineIdx === undefined ? '' : memeStat.lines[lineIdx].txt
+  let lineTxt = lineIdx === undefined ? '' : memeStat.lines[lineIdx].txt;
 
   displayAfterChange();
   document.querySelector('.meme-txt input').value = lineTxt;
@@ -237,8 +219,6 @@ let resizeCanvas = () => {
 }
 
 
-// let onMemeFilter = (that, ev) => {
-//   ev.preventDefault();
-//   console.log(that.value);
-//   renderImgs(that.value);
-// }
+let onMemeFilter = that => {
+  renderImgs(that.value);
+}
