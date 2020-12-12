@@ -46,13 +46,10 @@ let getGImgs = () => {
 }
 
 
- // change to find after
 let getImgById = imgId => {
-  var img;
-  for (var i = 0; i < gImgs.length; i++) {
-    if (gImgs[i].id === imgId) img = gImgs[i];
-  }
-  return img
+  return gImgs.find((img, idx) => {
+    if (img.id === imgId) return gImgs[idx];
+  });
 }
 
 
@@ -79,7 +76,7 @@ let updateGMemeId = imgId => {
 }
 
 
-let updateFont = font => { 
+let updateFont = font => {
   gMeme.lines[gMeme.selectedLineIdx].font = font;
 }
 
@@ -106,11 +103,8 @@ let deleteLine = () => {
     gMeme.selectedLineIdx = -1;
     return undefined;
   }
-  // else if (gMeme.lines[gMeme.selectedLineIdx] === 0) // check it later
 
-  gMeme.selectedLineIdx = (gMeme.selectedLineIdx === 1) ? 0 : 1;
-
-  return gMeme.lines.length === 0  ? undefined : gMeme.selectedLineIdx;
+  return gMeme.selectedLineIdx = (gMeme.selectedLineIdx === 1) ? 0 : 1;
 }
 
 

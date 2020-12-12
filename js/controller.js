@@ -184,7 +184,7 @@ let onDeleteLine = () => {
 
   let lineIdx = deleteLine();
   let memeStat = getGMeme();
-  let lineTxt = lineIdx === undefined ? '' : memeStat.lines[lineIdx].txt;
+  let lineTxt = !lineIdx ? '' : memeStat.lines[lineIdx].txt;
 
   displayAfterChange();
   document.querySelector('.meme-txt input').value = lineTxt;
