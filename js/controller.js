@@ -45,106 +45,94 @@ let onImgClick = (imgUrl, imgId) => {
 
 
 let _displayImgToCanvas = imgUrl => {
-  let memeStat = getGMeme();
-
-  var img = new Image();
+  let img = new Image();
   img.src = imgUrl;
   img.onload = () => {
     gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-
-    if (gRowsCount === 0) return;
-    drawText(memeStat.lines[0].stroke, memeStat.lines[0].align, memeStat.lines[0].size, memeStat.lines[0].font, memeStat.lines[0].txt, memeStat.lines[0].color);
-
-    if (gRowsCount > 1) {
-      drawText(memeStat.lines[1].stroke, memeStat.lines[1].align, memeStat.lines[1].size, memeStat.lines[1].font, memeStat.lines[1].txt, memeStat.lines[1].color, 40, 450);
-    }
+    displayTxtToCanvas();
   };
-
 }
 
 
 let onGetUserTxt = txt => {
-  let x = 40;
-  let y;
   let memeStat = getGMeme();
+  if (memeStat.lines.length === 0) return;
 
   displayAfterChange();
   let lineIdx = memeStat.selectedLineIdx;
-
-  if (lineIdx === -1) return;
   memeStat.lines[lineIdx].txt = txt;
-
-  if (lineIdx === 0) y = 40;
-  else if (lineIdx === 1) y = 450;
-
-  drawText(memeStat.lines[lineIdx].stroke, memeStat.lines[lineIdx].align, memeStat.lines[lineIdx].size, memeStat.lines[lineIdx].font, memeStat.lines[lineIdx].txt, memeStat.lines[lineIdx].color, x, y);
+  let currLine = memeStat.lines[lineIdx];
+  drawText(currLine);
 }
 
 
-let drawText = (stroke = '#000000', txtAlign = 'Right', fontSize = 40, font = 'Impact', txt, color = '#ffffff', x = 40, y = 40) => {
-  if (!txt) return;
+let drawText = (currLine) => {
+  if (!currLine.txt) return;
 
   gCtx.beginPath();
   gCtx.lineWidth = '2';
-  gCtx.font = `${fontSize}px ${font}`;
-  gCtx.fillStyle = color;
-  gCtx.strokeStyle = stroke;
-  gCtx.textAlign = txtAlign;
-  let txtWidth = gCtx.measureText(txt).width;
+  gCtx.font = `${currLine.size}px ${currLine.font}`;
+  gCtx.fillStyle = currLine.color;
+  gCtx.strokeStyle = currLine.stroke;
+  gCtx.textAlign = currLine.align;
+  let txtWidth = gCtx.measureText(currLine.txt).width;
 
-  if (txtAlign === 'Right') x = (txtWidth + 7);
-  else if (txtAlign === 'right') x = (gCanvas.width - 7) - (txtWidth / txtWidth);
-  else if (txtAlign === 'center') x = (gCanvas.width / 2) - (txtWidth / txtWidth);
+  if (currLine.align === 'Right') currLine.pos.x = (txtWidth + 7);
+  else if (currLine.align === 'right') currLine.pos.x = (gCanvas.width - 7) - (txtWidth / txtWidth);
+  else if (currLine.align === 'center') currLine.pos.x = (gCanvas.width / 2) - (txtWidth / txtWidth);
 
-  gCtx.fillText(txt, x, y);
-  gCtx.strokeText(txt, x, y);
-
+  gCtx.fillText(currLine.txt, currLine.pos.x, currLine.pos.y);
+  gCtx.strokeText(currLine.txt, currLine.pos.x, currLine.pos.y);
 }
 
 
 let onAddLine = () => {
-  if (gRowsCount === 2) return;
   let elInput = document.querySelector('.meme-txt input');
   addLine();
   elInput.value = '';
   makePalteWhite();
-  gRowsCount === 0 ? drawSqure(5, 5, 'yellow') : drawSqure(5, gCanvas.height / 100 * 76, 'yellow');
+
+  if(gRowsCount === 0) drawSqure(gCanvas.width / 100 , gCanvas.height / 100);
+  else if(gRowsCount === 1) drawSqure(gCanvas.width / 100 , gCanvas.height - 52);
+  else if (gRowsCount > 1) drawSqure(gCanvas.width / 100 , gCanvas.height / 2 - 42);
+  
   gRowsCount++;
   elInput.focus();
 }
 
 
-let drawSqure = (x = 5, y = 5, borderColor = 'black') => {
+let drawSqure = (x = 5, y = 5, width = 490, height = 50) => {
   gCtx.beginPath();
-  gCtx.rect(x, y, 490, 100);
+  gCtx.rect(x, y, width, height);
   gCtx.closePath();
-  gCtx.strokeStyle = borderColor;
+  gCtx.strokeStyle = 'yellow';
   gCtx.stroke();
 }
 
 
 let onSwitchLine = () => {
-  let memeStat = getGMeme();
-  if (memeStat.lines.length === 1) return;
-
   let elSelect = document.querySelector('select');
   let elColor = document.querySelector('.inner-color');
-
-  if (memeStat.selectedLineIdx === 0) {
-    memeStat.selectedLineIdx = 1;
-    drawSqure(5, 380, 'yellow');
-    elSelect.value = memeStat.lines[1].font;
-    elColor.value = memeStat.lines[1].color;
-  } else if (memeStat.selectedLineIdx === 1) {
-    memeStat.selectedLineIdx = 0;
-    drawSqure(5, 5, 'yellow');
-    elSelect.value = memeStat.lines[0].font;
-    elColor.value = memeStat.lines[0].color;
-  }
-
   let elInput = document.querySelector('.meme-txt input');
-  elInput.value = memeStat.lines[memeStat.selectedLineIdx].txt;
+  let memeStat = getGMeme();
+
+
+  if (memeStat.selectedLineIdx + 1 === memeStat.lines.length) memeStat.selectedLineIdx = 0;
+  else memeStat.selectedLineIdx += 1;
+
+  let currLine = memeStat.lines[memeStat.selectedLineIdx];
+
+  elSelect.value = currLine.font;
+  elColor.value = currLine.color;
+  elInput.value = currLine.txt;
   elInput.focus();
+
+  let txtX = currLine.pos.x;
+  let txtY = currLine.pos.y - currLine.size;
+  let txtHeight = currLine.size;
+  let txtWidth = gCtx.measureText(currLine.txt).width;
+
+  drawSqure(txtX, txtY, txtWidth, txtHeight);
 }
 
 
@@ -184,7 +172,9 @@ let onDeleteLine = () => {
 
   let lineIdx = deleteLine();
   let memeStat = getGMeme();
-  let lineTxt = !lineIdx ? '' : memeStat.lines[lineIdx].txt;
+  let lineTxt;
+  if (lineIdx === '') lineTxt = '';
+  else lineTxt = memeStat.lines[lineIdx].txt;
 
   displayAfterChange();
   document.querySelector('.meme-txt input').value = lineTxt;
@@ -222,3 +212,16 @@ let resizeCanvas = () => {
 let onMemeFilter = that => {
   renderImgs(that.value);
 }
+
+
+let displayTxtToCanvas = () => {
+  let memeStat = getGMeme();
+  let linesCount = memeStat.lines.length;
+
+  for (let i = 0; i < linesCount; i++) {
+    let currLine = memeStat.lines[i];
+    drawText(currLine);
+  }
+}
+
+

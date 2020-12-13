@@ -12,7 +12,11 @@ let gMeme = {
     align: 'right',
     color: '#ffffff',
     stroke: '#000000',
-    font: 'Impact'
+    font: 'Impact',
+    pos: {
+      x: 40,
+      y: 40
+    }
   }]
 };
 
@@ -41,6 +45,7 @@ let createImgs = () => {
   return gImgs;
 }
 
+
 let getGImgs = () => {
   return gImgs;
 }
@@ -59,15 +64,26 @@ let getGMeme = () => {
 
 
 let addLine = () => {
+  let y;
+  if (gMeme.lines.length === 0) y = 40;
+  else if (gMeme.lines.length === 1) y = gCanvas.height - 5;
+  else y = gCanvas.height / 2;
+  
   gMeme.lines.push({
     txt: '',
     size: 40,
     align: 'right',
     color: '#ffffff',
     stroke: '#000000',
-    font: 'Impact'
+    font: 'Impact',
+    pos: {
+      x: 40,
+      y
+    }
   });
-  gMeme.selectedLineIdx += 1;
+  
+  if (gMeme.lines.length === 1) gMeme.selectedLineIdx = 0;
+  else gMeme.selectedLineIdx += 1;
 }
 
 
@@ -93,18 +109,15 @@ let updateFontSize = operator => {
 
 let updateFontAligment = dirName => {
   gMeme.lines[gMeme.selectedLineIdx].align = dirName;
+  console.log('the x place:',gMeme.lines[gMeme.selectedLineIdx].pos.x)
+  console.log('the y place:' ,gMeme.lines[gMeme.selectedLineIdx].pos.y)
 }
 
 
 let deleteLine = () => {
   gMeme.lines.splice(gMeme.selectedLineIdx, 1);
-
-  if (gMeme.lines.length === 0) {
-    gMeme.selectedLineIdx = -1;
-    return undefined;
-  }
-
-  return gMeme.selectedLineIdx = (gMeme.selectedLineIdx === 1) ? 0 : 1;
+  if (gMeme.lines.length === 0) return '';
+  return gMeme.selectedLineIdx = gMeme.lines.length - 1;
 }
 
 
