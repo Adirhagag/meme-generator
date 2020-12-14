@@ -71,6 +71,11 @@ p {
   height: 250px;
 }
 
+.imgs-container img:hover {
+  width:  260px;
+  height: 260px;
+}
+
 .gallery-container footer {
   background-color: lightgray;
   justify-content: center;
